@@ -27,18 +27,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const card = document.querySelectorAll('.flipcard');
   let a = false;
+  let count = 0;
+  let conf = false;
 
   card.forEach((element) => {
     element.addEventListener('click', function() {
+      element.classList.toggle('flip');
       if (!a) {
-        element.classList.toggle('flip');
         let back = element.querySelector('.back');
         back.classList.toggle('boxshadow');
         a = element.dataset.number;
         this.style.pointerEvents = "none";
       } else {
         if (a !== element.dataset.number) {
-            element.classList.toggle('flip');
             setTimeout(() => {
               document.querySelectorAll(`[data-number="${a}"]`).forEach(function (e) {
                 let back = e.querySelector('.back');
@@ -50,15 +51,27 @@ document.addEventListener("DOMContentLoaded", () => {
               a = false;
             }, 500);
         } else {
-          element.classList.toggle('flip');
           document.querySelectorAll(`[data-number="${a}"]`).forEach(function (e) {
             let back = e.querySelector('.back');
             back.classList.remove('boxshadow');
             e.style.pointerEvents = "none";
           });
-        a = false;
+          a = false;
+          count++;
+          if (count == numbers.length/2) {
+            setTimeout(() => {
+              conf = confirm("Вы выйграли!!! Хотите повторить?");
+              if (conf) {
+                location.reload()
+              }
+            }, 500);
+          }
         }
       }
     })
   });
+
+  function refresh(value) {
+    let refresh = value ?? location.reload();
+  }
   })
